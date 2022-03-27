@@ -2,6 +2,7 @@ package com.app.disney.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,4 +48,24 @@ public class CharacterServiceImpl implements CharacterService{
 		// TODO Auto-generated method stub
 	}
 
+	@Override
+	public List<Characters> getByName(String name) {
+		return this.characterRepository.getByName(name);
+	}
+
+	@Override
+	public List<Characters> getByIdMovie(Long id) {
+		return this.characterRepository.getByIdMovie(id);
+	}
+
+	@Override
+	public List<Characters> getByAge(int age) {
+		return this.characterRepository.getByAge(age);
+	}
+
+	@Override
+	public List<Characters> getByWeight(double weight) {
+		return this.characterRepository.getByWeight(weight);
+	}
+	
 }

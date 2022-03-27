@@ -1,6 +1,7 @@
 package com.app.disney.controllers;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +24,7 @@ import com.app.disney.security.dto.Message;
 import com.app.disney.service.CharacterService;
 
 @RestController
-@RequestMapping(value = "/character")
+@RequestMapping(value = "/characters")
 public class CharactersController {
 	 @Autowired
 	 CharacterService characterService;
@@ -52,6 +54,51 @@ public class CharactersController {
 			return new ResponseEntity<Characters> (this.characterService.update(character),HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<Message> (new Message("Se produjo un error al actualizar"),HttpStatus.BAD_REQUEST);
+		}
+	 }
+	 
+	 @GetMapping("/age/{age}")
+	 public ResponseEntity<?> getCharactersByAge(@PathVariable("age") int age){
+		 try {
+			 List<Characters> request = this.characterService.getByAge(age);
+			if(request.isEmpty())
+				return new ResponseEntity<Message> (new Message("No se encontraron personajes con la edad ingresada"),HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<List<Characters>> (request,HttpStatus.OK);
+		 } catch (Exception e) {
+			return new ResponseEntity<Message> (new Message("Se produjo un error"),HttpStatus.BAD_REQUEST);
+		}
+	 }
+	 @GetMapping("/name/{name}")
+	 public ResponseEntity<?> getCharactersByName(@PathVariable("name") String name){
+		 try {
+			 List<Characters> request = this.characterService.getByName(name);
+			if(request.isEmpty())
+				return new ResponseEntity<Message> (new Message("No se encontraron personajes con el nombre ingresado"),HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<List<Characters>> (request,HttpStatus.OK);
+		 } catch (Exception e) {
+			return new ResponseEntity<Message> (new Message("Se produjo un error"),HttpStatus.BAD_REQUEST);
+		}
+	 }
+	 @GetMapping("/movie/{id}")
+	 public ResponseEntity<?> getCharactersByMovie(@PathVariable("id") Long id){
+		 try {
+			 List<Characters> request = this.characterService.getByIdMovie(id);
+			if(request.isEmpty())
+				return new ResponseEntity<Message> (new Message("No se encontraron personajes para la pelicula ingresada"),HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<List<Characters>> (request,HttpStatus.OK);
+		 } catch (Exception e) {
+			return new ResponseEntity<Message> (new Message("Se produjo un error"),HttpStatus.BAD_REQUEST);
+		}
+	 }
+	 @GetMapping("/weight/{weight}")
+	 public ResponseEntity<?> getCharactersByWeight(@PathVariable("weight") double weight){
+		 try {
+			 List<Characters> request = this.characterService.getByWeight(weight);
+			if(request.isEmpty())
+				return new ResponseEntity<Message> (new Message("No se encontraron personajes con el peso ingresado"),HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<List<Characters>> (request,HttpStatus.OK);
+		 } catch (Exception e) {
+			return new ResponseEntity<Message> (new Message("Se produjo un error"),HttpStatus.BAD_REQUEST);
 		}
 	 }
 }
