@@ -1,5 +1,6 @@
 package com.app.disney.controllers;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.app.disney.models.Characters;
 import com.app.disney.models.Movie;
 import com.app.disney.security.dto.CharacterDTO;
-import com.app.disney.security.dto.CharacterReturnDTO;
+import com.app.disney.security.dto.CharacterFilterReturnDTO;
 import com.app.disney.security.dto.Message;
 import com.app.disney.service.CharacterService;
 import com.app.disney.service.MovieService;
@@ -40,13 +41,29 @@ public class CharactersController {
 	 @GetMapping
 	 public ResponseEntity<?> getAll(){
 		 try {
-			 return new ResponseEntity<List<CharacterReturnDTO>> (this.characterService.listAll(),HttpStatus.OK);
+			List<Characters> listCharacters=  this.characterService.listAll();
+			List<CharacterFilterReturnDTO> listReturn = Arrays.asList(modelMapper.map(listCharacters,CharacterFilterReturnDTO[].class)); 
+			if(listCharacters.isEmpty())
+				return new ResponseEntity<Message> (new Message("No se encontraron personajes registrados"),HttpStatus.BAD_REQUEST); 
+			return new ResponseEntity<List<CharacterFilterReturnDTO>> (listReturn,HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<Message> (new Message("Ocurrio un error al obtener el listado"),HttpStatus.BAD_REQUEST);
 		}
 		 
 	 }
 	 
+	 @GetMapping("details/{id}")
+	 public ResponseEntity<?> details(@PathVariable("id") Long id){
+		 try {
+			 Optional<Characters> character = this.characterService.findById(id);
+			 CharacterDTO characterResponse = modelMapper.map(character.get(), CharacterDTO.class);
+			 if(character.isEmpty())
+					return new ResponseEntity<Message> (new Message("No se encuentra el personaje con id: "+ id),HttpStatus.BAD_REQUEST); 
+			return new ResponseEntity<CharacterDTO> (characterResponse,HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<Message> (new Message("Se produjo un error"),HttpStatus.BAD_REQUEST);
+		}
+	 }
 	 @PostMapping("/save")
 	 public ResponseEntity<?> save(@Valid@RequestBody CharacterDTO characterDTO, BindingResult result){
 		 try {
@@ -89,9 +106,11 @@ public class CharactersController {
 	 public ResponseEntity<?> getCharactersByAge(@PathVariable("age") int age){
 		 try {
 			 List<Characters> request = this.characterService.getByAge(age);
+			 
+			 List<CharacterFilterReturnDTO> listReturn = Arrays.asList(modelMapper.map(request,CharacterFilterReturnDTO[].class)); 
 			if(request.isEmpty())
 				return new ResponseEntity<Message> (new Message("No se encontraron personajes con la edad ingresada"),HttpStatus.BAD_REQUEST);
-			return new ResponseEntity<List<Characters>> (request,HttpStatus.OK);
+			return new ResponseEntity<List<CharacterFilterReturnDTO>> (listReturn,HttpStatus.OK);
 		 } catch (Exception e) {
 			return new ResponseEntity<Message> (new Message("Se produjo un error"),HttpStatus.BAD_REQUEST);
 		}
@@ -99,10 +118,11 @@ public class CharactersController {
 	 @GetMapping("/name/{name}")
 	 public ResponseEntity<?> getCharactersByName(@PathVariable("name") String name){
 		 try {
-			 List<Characters> request = this.characterService.getByName(name);
-			if(request.isEmpty())
+			 List<Characters> listCharacters = this.characterService.getByName(name);
+				List<CharacterFilterReturnDTO> listReturn = Arrays.asList(modelMapper.map(listCharacters,CharacterFilterReturnDTO[].class)); 
+			if(listCharacters.isEmpty())
 				return new ResponseEntity<Message> (new Message("No se encontraron personajes con el nombre ingresado"),HttpStatus.BAD_REQUEST);
-			return new ResponseEntity<List<Characters>> (request,HttpStatus.OK);
+			return new ResponseEntity<List<CharacterFilterReturnDTO>> (listReturn,HttpStatus.OK);
 		 } catch (Exception e) {
 			return new ResponseEntity<Message> (new Message("Se produjo un error"),HttpStatus.BAD_REQUEST);
 		}
@@ -110,11 +130,12 @@ public class CharactersController {
 	 @GetMapping("/movie/{id}")
 	public ResponseEntity<?> getCharactersByMovie(@PathVariable("id") Long id) {
 		try {
-			List<Characters> request = this.characterService.findAllByIdMovie(id);
-			if (request.isEmpty())
+			List<Characters> listCharacters = this.characterService.findAllByIdMovie(id);
+			List<CharacterFilterReturnDTO> listReturn = Arrays.asList(modelMapper.map(listCharacters,CharacterFilterReturnDTO[].class)); 
+			if (listCharacters.isEmpty())
 				return new ResponseEntity<Message>(
 						new Message("No se encontraron personajes para la pelicula ingresada"), HttpStatus.BAD_REQUEST);
-			return new ResponseEntity<List<Characters>>(request, HttpStatus.OK);
+			return new ResponseEntity<List<CharacterFilterReturnDTO>>(listReturn, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<Message>(new Message("Se produjo un error"), HttpStatus.BAD_REQUEST);
 		}
@@ -123,10 +144,11 @@ public class CharactersController {
 	 @GetMapping("/weight/{weight}")
 	 public ResponseEntity<?> getCharactersByWeight(@PathVariable("weight") double weight){
 		 try {
-			 List<Characters> request = this.characterService.getByWeight(weight);
-			if(request.isEmpty())
+			 List<Characters> listCharacters = this.characterService.getByWeight(weight);
+			 List<CharacterFilterReturnDTO> listReturn = Arrays.asList(modelMapper.map(listCharacters,CharacterFilterReturnDTO[].class));
+			if(listCharacters.isEmpty())
 				return new ResponseEntity<Message> (new Message("No se encontraron personajes con el peso ingresado"),HttpStatus.BAD_REQUEST);
-			return new ResponseEntity<List<Characters>> (request,HttpStatus.OK);
+			return new ResponseEntity<List<CharacterFilterReturnDTO>> (listReturn,HttpStatus.OK);
 		 } catch (Exception e) {
 			return new ResponseEntity<Message> (new Message("Se produjo un error"),HttpStatus.BAD_REQUEST);
 		}

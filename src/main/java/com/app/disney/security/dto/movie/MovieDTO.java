@@ -1,4 +1,4 @@
-package com.app.disney.security.dto;
+package com.app.disney.security.dto.movie;
 
 import java.util.Date;
 import java.util.HashSet;

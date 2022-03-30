@@ -1,5 +1,8 @@
 package com.app.disney.controllers;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -19,10 +22,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.app.disney.models.Characters;
 import com.app.disney.models.Genre;
 import com.app.disney.models.Movie;
+import com.app.disney.security.dto.CharacterFilterReturnDTO;
 import com.app.disney.security.dto.Message;
-import com.app.disney.security.dto.MovieDTO;
+import com.app.disney.security.dto.movie.MovieDTO;
+import com.app.disney.security.dto.movie.MovieFilterReturnDTO;
 import com.app.disney.service.impl.GenreServiceImpl;
 import com.app.disney.service.impl.MovieServiceImpl;
 
@@ -106,7 +112,11 @@ public class MovieController {
 	@GetMapping("/name/{name}")
 	public ResponseEntity<?> getAllMoviesByName(@PathVariable(value = "name") String name) {
 		try {
-			return ResponseEntity.ok(movieService.findAllByTitle(name));
+			List<Movie> listMovies=  this.movieService.findAllByTitle(name);
+			List<MovieFilterReturnDTO> listReturn = Arrays.asList(modelMapper.map(listMovies,MovieFilterReturnDTO[].class)); 
+			if(listMovies.isEmpty())
+				return new ResponseEntity<Message> (new Message("No se encontraron peliculas con el nombre: "+ name),HttpStatus.BAD_REQUEST); 
+			return new ResponseEntity<List<MovieFilterReturnDTO>> (listReturn,HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<Message>(new Message("Se produjo un error"), HttpStatus.BAD_REQUEST);
 		}
@@ -117,7 +127,11 @@ public class MovieController {
 	public ResponseEntity<?> getAllMoviesById(@PathVariable(value = "genre") Long genreId) {
 		try {
 			Optional<Genre> genreRequest = genreService.findById(genreId);
-			return ResponseEntity.ok(genreRequest.get().getMovies());
+			List<Movie> listMovies=  genreRequest.get().getMovies();
+			List<MovieFilterReturnDTO> listReturn = Arrays.asList(modelMapper.map(listMovies,MovieFilterReturnDTO[].class)); 
+			if(listMovies.isEmpty())
+				return new ResponseEntity<Message> (new Message("No se encontraron peliculas con el genero: "+ genreRequest.get().getName()),HttpStatus.BAD_REQUEST); 
+			return new ResponseEntity<List<MovieFilterReturnDTO>> (listReturn,HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<Message>(new Message("Se produjo un error"), HttpStatus.BAD_REQUEST);
 		}
@@ -127,15 +141,20 @@ public class MovieController {
 	@GetMapping("/order/{order}")
 	public ResponseEntity<?> getAllMoviesByOrder(@PathVariable(value = "order") String order) {
 		try {
+			List<Movie> listMovies = new ArrayList<>();
 			if (order.equals("ASC")) {
-				return ResponseEntity.ok(movieService.findAllOrderByAsc());
+				 listMovies = movieService.findAllOrderByAsc();
 			} else {
 				if (order.equals("DESC")) {
-					return ResponseEntity.ok(movieService.findAllOrderByDesc());
+					listMovies = movieService.findAllOrderByDesc();
 				} else {
 					return new ResponseEntity<Message>(new Message("ERROR"), HttpStatus.BAD_REQUEST);
 				}
 			}
+			List<MovieFilterReturnDTO> listReturn = Arrays.asList(modelMapper.map(listMovies,MovieFilterReturnDTO[].class));
+			if(listMovies.isEmpty())
+				return new ResponseEntity<Message> (new Message("No se encontraron peliculas"),HttpStatus.BAD_REQUEST); 
+			return new ResponseEntity<List<MovieFilterReturnDTO>> (listReturn,HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<Message>(new Message("Se produjo un error"), HttpStatus.BAD_REQUEST);
 		}

@@ -13,8 +13,8 @@ import com.app.disney.models.Movie;
 import com.app.disney.repositories.CharacterRepository;
 import com.app.disney.repositories.MovieRepository;
 import com.app.disney.security.dto.CharacterDTO;
-import com.app.disney.security.dto.CharacterReturnDTO;
-import com.app.disney.security.dto.MovieDTO;
+import com.app.disney.security.dto.CharacterFilterReturnDTO;
+import com.app.disney.security.dto.movie.MovieDTO;
 import com.app.disney.service.CharacterService;
 import com.app.disney.service.MovieService;
 @Service
@@ -25,14 +25,8 @@ public class CharacterServiceImpl implements CharacterService{
 	MovieService movieService;
 	
 	@Override
-	public ArrayList<CharacterReturnDTO> listAll() {
-		ArrayList<CharacterReturnDTO> listReturn = new ArrayList<CharacterReturnDTO>();
-		List<Characters> list = this.characterRepository.findAll();
-		//creo una lista con elementos de tipo characterReturnDTO-> {image, name}; valor de retorno solicitado
-		for(Characters ch: list) {
-			listReturn.add(new CharacterReturnDTO(ch.getImage(),ch.getName()));
-		}
-		return listReturn;
+	public List<Characters> listAll() {
+		return this.characterRepository.findAll();
 	}
 
 	@Override

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import com.app.disney.models.Genre;
 import com.app.disney.models.Movie;
 import com.app.disney.repositories.MovieRepository;
-import com.app.disney.security.dto.MovieDTO;
+import com.app.disney.security.dto.movie.MovieDTO;
 import com.app.disney.service.GenreService;
 import com.app.disney.service.MovieService;
 @Service
@@ -22,8 +22,7 @@ public class MovieServiceImpl implements MovieService{
 	private GenreService genreService;
 
 	@Override
-	public Iterable<Movie> findAll() {
-
+	public List<Movie> findAll() {
 		return movieRepo.findAll();
 	}
 
@@ -64,11 +63,11 @@ public class MovieServiceImpl implements MovieService{
 
 	}
 
-	public Iterable<Movie> findAllOrderByAsc() {
+	public List<Movie> findAllOrderByAsc() {
 		return movieRepo.findAllOrderByAsc();
 	}
 
-	public Iterable<Movie> findAllOrderByDesc() {
+	public List<Movie> findAllOrderByDesc() {
 		return movieRepo.findAllOrderByDesc();
 	}
 
@@ -93,6 +92,8 @@ public class MovieServiceImpl implements MovieService{
 			}
 		}
 	}
+
+
 	
 
 }
