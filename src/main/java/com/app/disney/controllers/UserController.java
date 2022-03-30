@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.app.disney.models.User;
+import com.app.disney.security.dto.Message;
 import com.app.disney.service.UserService;
 
 
@@ -23,13 +24,21 @@ public class UserController {
 	UserService userService;
 
 	@GetMapping(path= "/{id}")
-	public ResponseEntity<User> getById(@PathVariable("id") Long id){
-		return new ResponseEntity<User> (this.userService.getById(id),HttpStatus.OK);
+	public ResponseEntity<?> getById(@PathVariable("id") Long id){
+		try {
+			return new ResponseEntity<User> (this.userService.getById(id),HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<Message> (new Message("Se produjo un error"),HttpStatus.BAD_REQUEST);
+		}
+		
 	}
 	
 	@GetMapping
-	public List<User> getAllUsers() {
-	// get list of all users
-	return this.userService.getAll();
+	public ResponseEntity<?> getAllUsers() {
+	try {
+		return new ResponseEntity<List<User>> (this.userService.getAll(),HttpStatus.OK);
+	} catch (Exception e) {
+		return new ResponseEntity<Message> (new Message("Se produjo un error"),HttpStatus.BAD_REQUEST);
+	}
 	}
 }

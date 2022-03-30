@@ -3,11 +3,15 @@ package com.app.disney.models;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
 import org.hibernate.annotations.SQLDelete;
@@ -32,24 +36,21 @@ public class Characters {
 	@Column 
 	private String image;
 	
-	public String getImage() {
-		return image;
-	}
-
-	public void setImage(String image) {
-		this.image = image;
-	}
 	@JsonIgnore
-	@ManyToMany(mappedBy="characters")
+	@ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name = "character_movie",
+            joinColumns = {@JoinColumn(name = "character_id")},
+            inverseJoinColumns = {@JoinColumn(name = "movie_id")})
 	private List<Movie> movies;
 	
-	public Characters(String name, int age, double weight, String history, boolean enable, String image) {
+	public Characters(String name, int age, double weight, String history, boolean enable, String image, List<Movie> movies) {
 		this.name = name;
 		this.age = age;
 		this.weight = weight;
 		this.history = history;
 		this.enable = enable;
 		this.image = image;
+		this.movies = movies;
 	}
 	
 	public Characters() {};
@@ -58,6 +59,14 @@ public class Characters {
 		return movies;
 	}
 
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+	
 	public void setMovies(List<Movie> movies) {
 		this.movies = movies;
 	}

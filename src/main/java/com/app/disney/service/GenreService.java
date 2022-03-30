@@ -5,7 +5,7 @@ import java.util.Optional;
 import com.app.disney.models.Genre;
 
 public interface GenreService {
-public Iterable<Genre> findAll();
+	public Iterable<Genre> findAll();
 	
 	public Optional<Genre> findById(Long id);
 	
@@ -14,4 +14,6 @@ public Iterable<Genre> findAll();
 	public Genre update(Genre genre,Long id);
 	
 	public void deleteById(Long id);
+
+	public Optional<Genre> findByName(String name);
 }

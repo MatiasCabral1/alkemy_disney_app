@@ -1,13 +1,18 @@
 package com.app.disney.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.SQLDelete;
@@ -28,16 +33,20 @@ public class Genre {
 	private boolean enable;
 	
 	@JsonIgnore
-	@OneToMany
-	@JoinColumn(name="genre_id", referencedColumnName="id")
+	@ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name = "genre_movie",
+            joinColumns = {@JoinColumn(name = "genre_id")},
+            inverseJoinColumns = {@JoinColumn(name = "movie_id")})
 	private List<Movie> movies;
 	
-	public Genre() {}
+	public Genre() {
+		this.movies = new ArrayList<>();
+	}
 
 	public Genre(String name, String image, boolean enable) {
 		this.name = name;
 		this.image = image;
-		//this.movies = movies;
+		this.movies = new ArrayList<>();
 		this.enable = enable;
 	}
 
@@ -72,4 +81,14 @@ public class Genre {
 	public void setMovies(List<Movie> movies) {
 		this.movies = movies;
 	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	
 }

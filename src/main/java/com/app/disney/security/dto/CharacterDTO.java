@@ -1,7 +1,11 @@
 package com.app.disney.security.dto;
 
+import java.util.List;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+
+import com.app.disney.models.Movie;
 
 public class CharacterDTO {
 	@NotBlank
@@ -14,6 +18,8 @@ public class CharacterDTO {
 	private String history;
 	@NotNull
 	private String image;
+	
+	private List<Movie> movies;
 
 	
 	public CharacterDTO() {
@@ -67,5 +73,15 @@ public class CharacterDTO {
 	public void setImage(String image) {
 		this.image = image;
 	}
+
+	public List<Movie> getMovies() {
+		return movies;
+	}
+
+	public void setMovies(List<Movie> movies) {
+		this.movies = movies;
+	}
+	
+	
 	
 }

@@ -3,6 +3,7 @@ package com.app.disney.models;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -29,26 +30,23 @@ public class Movie {
 	@Column
 	private String title;
 	@Column
-	private Date creationDate;
+	private String creationDate;
 	@Column
 	private int score;
 	@Column
 	private boolean enable;
 	
-	@JsonIgnore
-	@ManyToMany
-	private List<Characters> characters;
-	
 	public Movie() {}
 
+	
 	public Movie(String image, String title, int score, boolean enable) {
 		this.image = image;
 		this.title = title;
 		this.score = score;
 		this.enable = enable;
-		//this.characters = characters;
 	}
 
+	
 	public Long getId() {
 		return id;
 	}
@@ -73,11 +71,11 @@ public class Movie {
 		this.title = title;
 	}
 
-	public Date getCreationDate() {
+	public String getCreationDate() {
 		return creationDate;
 	}
 
-	public void setCreationDate(Date creationDate) {
+	public void setCreationDate(String creationDate) {
 		this.creationDate = creationDate;
 	}
 
@@ -96,13 +94,5 @@ public class Movie {
 	public void setEnable(boolean enable) {
 		this.enable = enable;
 	}
-
-	public List<Characters> getCharacters() {
-		return characters;
-	}
-
-	public void setCharacters(List<Characters> characters) {
-		this.characters = characters;
-	}	
 	
 }

@@ -71,22 +71,32 @@ public class AuthController {
 	}
 	@PostMapping("/login")
 	public ResponseEntity<?> authenticate(@Valid @RequestBody LoginUserDTO user,BindingResult result ){
-		//validaciones
-		if(result.hasErrors()) {
-			return new ResponseEntity<Message>(new Message(result.getFieldError().getDefaultMessage()),HttpStatus.BAD_REQUEST);
+		try {
+			//validaciones
+			if(result.hasErrors()) {
+				return new ResponseEntity<Message>(new Message(result.getFieldError().getDefaultMessage()),HttpStatus.BAD_REQUEST);
+			}
+			Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(),user.getPassword()));
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+			String jwt = jwtProvider.generateToken(authentication);
+			JwtDTO jwtDto = new JwtDTO(jwt);
+			return new ResponseEntity<JwtDTO>(jwtDto,HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<Message> (new Message("Se produjo un error"),HttpStatus.BAD_REQUEST);
 		}
-		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(),user.getPassword()));
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-		String jwt = jwtProvider.generateToken(authentication);
-		JwtDTO jwtDto = new JwtDTO(jwt);
-		return new ResponseEntity<JwtDTO>(jwtDto,HttpStatus.OK);
+		
 	}
 	//verificar refresh
 	@PostMapping("/refresh")
 	public ResponseEntity<?> refresh(@RequestBody JwtDTO jwtDto) throws ParseException {
-		String token = jwtProvider.refreshToken(jwtDto);
-		JwtDTO jwt = new JwtDTO(token);
-		return new ResponseEntity<JwtDTO>(jwt, HttpStatus.OK);
+		try {
+			String token = jwtProvider.refreshToken(jwtDto);
+			JwtDTO jwt = new JwtDTO(token);
+			return new ResponseEntity<JwtDTO>(jwt, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<Message> (new Message("Se produjo un error"),HttpStatus.BAD_REQUEST);
+		}
+		
 	
 	}
 }

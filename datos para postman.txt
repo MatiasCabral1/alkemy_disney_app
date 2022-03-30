@@ -5,7 +5,7 @@ login :
     "password": "1234"
 }
 charater:registro: 
-url --> http://localhost:8080/auth/register
+url --> http://localhost:8080/characters/register
 {
     "name": "Superman",
     "age": 30,
@@ -31,3 +31,10 @@ age:
 http://localhost:8080/characters/age/{age}
 id movie:
 http://localhost:8080/characters/movies/{idMovie}
+
+movie:registro:
+url --> http://localhost:8080/characters/movie/save
+
+
+cosas a corregir: valores de retorno, en caracter debe devolver el objeto y no un string.
+

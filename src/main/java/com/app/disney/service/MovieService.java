@@ -15,4 +15,6 @@ public interface MovieService {
 	
 	public void deleteById(Long id);
 
+	public Optional<Movie> findByTitle(String title);
+
 }

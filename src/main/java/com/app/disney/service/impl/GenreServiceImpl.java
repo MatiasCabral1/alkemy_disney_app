@@ -54,8 +54,8 @@ public class GenreServiceImpl implements GenreService{
 		return genreRepo.existsByName(name);
 	}
 
-	public Genre findByName(String name) {
-		return this.genreRepo.findByName(name).get();
+	public Optional<Genre> findByName(String name) {
+		return this.genreRepo.findByName(name);
 	}
 
 }

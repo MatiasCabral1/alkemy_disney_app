@@ -8,28 +8,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.app.disney.models.Characters;
+import com.app.disney.models.Genre;
+import com.app.disney.models.Movie;
 import com.app.disney.repositories.CharacterRepository;
+import com.app.disney.repositories.MovieRepository;
+import com.app.disney.security.dto.CharacterDTO;
 import com.app.disney.security.dto.CharacterReturnDTO;
+import com.app.disney.security.dto.MovieDTO;
 import com.app.disney.service.CharacterService;
+import com.app.disney.service.MovieService;
 @Service
 public class CharacterServiceImpl implements CharacterService{
 	@Autowired
 	CharacterRepository characterRepository;
+	@Autowired
+	MovieService movieService;
+	
 	@Override
 	public ArrayList<CharacterReturnDTO> listAll() {
 		ArrayList<CharacterReturnDTO> listReturn = new ArrayList<CharacterReturnDTO>();
-		try {
-			List<Characters> list = this.characterRepository.findAll();
-			//creo una lista con elementos de tipo characterReturnDTO-> {image, name}; valor de retorno solicitado
-			for(Characters ch: list) {
-				listReturn.add(new CharacterReturnDTO(ch.getImage(),ch.getName()));
-			}
-			return listReturn;
-		} catch (Exception e) {
-			//retorno la lista vacia.
-			return listReturn;
+		List<Characters> list = this.characterRepository.findAll();
+		//creo una lista con elementos de tipo characterReturnDTO-> {image, name}; valor de retorno solicitado
+		for(Characters ch: list) {
+			listReturn.add(new CharacterReturnDTO(ch.getImage(),ch.getName()));
 		}
-		
+		return listReturn;
 	}
 
 	@Override
@@ -44,18 +47,12 @@ public class CharacterServiceImpl implements CharacterService{
 	}
 
 	@Override
-	public void delete(Characters character) {
-		// TODO Auto-generated method stub
+	public void delete(Long id) {
+		this.characterRepository.deleteById(id);
 	}
-
 	@Override
 	public List<Characters> getByName(String name) {
 		return this.characterRepository.getByName(name);
-	}
-
-	@Override
-	public List<Characters> getByIdMovie(Long id) {
-		return this.characterRepository.getByIdMovie(id);
 	}
 
 	@Override
@@ -67,5 +64,16 @@ public class CharacterServiceImpl implements CharacterService{
 	public List<Characters> getByWeight(double weight) {
 		return this.characterRepository.getByWeight(weight);
 	}
+
+	@Override
+	public List<Characters> findAllByIdMovie(Long id) {
+		return this.characterRepository.findAllByMoviesIdAndEnable(id, true);
+	}
+
+	@Override
+	public Optional<Characters> findById(Long characterId) {
+		return this.characterRepository.findById(characterId);
+	}
+
 	
 }
