@@ -1,10 +1,10 @@
 # alkemy_disney_app
-# Para correr la aplicacion es necesario primero crear la base de datos con nombre: "disneydb"
-# Para cambiar los datos de sesion para la base de datos en caso de ser necesario estan en "aplication properties"
-# El usuario actual para la base de datos es "user: root" "password: root"
-# Tiene la configuracion para swagger.
+### Para correr la aplicacion es necesario primero crear la base de datos con nombre: "disneydb"
+### Para cambiar los datos de sesion para la base de datos en caso de ser necesario estan en "aplication properties"
+### El usuario actual para la base de datos es "user: root" "password: root"
+### Tiene la configuracion para swagger.
 
-Algunos links para probar en postman junto con el formato de texto (json) que se deben enviar en caso de ser metodo POST: 
+#####Algunos links para probar en postman junto con el formato de texto (json) que se deben enviar en caso de ser metodo POST: 
 
 url --> http://localhost:8080/auth/login
 login :
