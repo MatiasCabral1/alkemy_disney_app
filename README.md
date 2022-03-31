@@ -90,7 +90,7 @@ url --> http://localhost:8080/movie/2
 }]
 }
 
-busqueda con filtros: 
+## busqueda con filtros: 
 ### characters
 name:
 
