@@ -4,7 +4,7 @@
 ### El usuario actual para la base de datos es "user: root" "password: root"
 ### Tiene la configuracion para swagger.
 
-#####Algunos links para probar en postman junto con el formato de texto (json) que se deben enviar en caso de ser metodo POST: 
+#### Algunos links para probar en postman junto con el formato de texto (json) que se deben enviar en caso de ser metodo POST: 
 
 url --> http://localhost:8080/auth/login
 login :
@@ -93,19 +93,33 @@ url --> http://localhost:8080/movie/2
 busqueda con filtros: 
 ##### characters
 name:
+
 http://localhost:8080/characters/name/{name}
+
 age:
+
 http://localhost:8080/characters/age/{age}
+
 id movie:
+
 http://localhost:8080/characters/movie/{idMovie}
+
 weight:
+
 http://localhost:8080/characters/weight/{weight}
+
 ##### movies
+
 name: 
+
 http://localhost:8080/movie/name/{name}
+
 genre:
+
 http://localhost:8080/movie/genre/{genre}
+
 order:
+
 http://localhost:8080/movie/order/{order} -> 'ASC' or 'DESC' 
 
 
