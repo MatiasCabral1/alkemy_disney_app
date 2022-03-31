@@ -59,6 +59,10 @@ public class mainSecurity extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/auth/register").permitAll()
                 .antMatchers("/auth/login").permitAll()
+                .antMatchers("/v2/api-docs/**",
+                        "/swagger-ui/**",
+                        "/swagger-resources/**",
+                        "/configuration/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(jwtEntryPoint)

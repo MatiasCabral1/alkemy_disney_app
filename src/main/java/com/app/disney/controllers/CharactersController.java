@@ -130,7 +130,7 @@ public class CharactersController {
 	 @GetMapping("/movie/{id}")
 	public ResponseEntity<?> getCharactersByMovie(@PathVariable("id") Long id) {
 		try {
-			List<Characters> listCharacters = this.characterService.findAllByIdMovie(id);
+			List<Characters> listCharacters = this.characterService.findAllByMoviesIdAndEnable(id);
 			List<CharacterFilterReturnDTO> listReturn = Arrays.asList(modelMapper.map(listCharacters,CharacterFilterReturnDTO[].class)); 
 			if (listCharacters.isEmpty())
 				return new ResponseEntity<Message>(

@@ -1,5 +1,6 @@
 package com.app.disney.service.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -56,6 +57,10 @@ public class GenreServiceImpl implements GenreService{
 
 	public Optional<Genre> findByName(String name) {
 		return this.genreRepo.findByName(name);
+	}
+
+	public List<Genre> findAllByMoviesIdAndEnable(Long movieId) {
+		return this.genreRepo.findAllByMoviesIdAndEnable(movieId, true);
 	}
 
 }

@@ -8,8 +8,10 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.app.disney.models.Characters;
 import com.app.disney.models.Genre;
 import com.app.disney.models.Movie;
+import com.app.disney.repositories.CharacterRepository;
 import com.app.disney.repositories.MovieRepository;
 import com.app.disney.security.dto.movie.MovieDTO;
 import com.app.disney.service.GenreService;
@@ -20,7 +22,8 @@ public class MovieServiceImpl implements MovieService{
 	private MovieRepository movieRepo;
 	@Autowired
 	private GenreService genreService;
-
+	@Autowired
+	private CharacterRepository characterRepository;
 	@Override
 	public List<Movie> findAll() {
 		return movieRepo.findAll();
@@ -37,7 +40,6 @@ public class MovieServiceImpl implements MovieService{
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/YYYY hh:mm:ss");
 		String dateString = sdf.format(new Date());
 		movie.setCreationDate(dateString);
-
 		return movieRepo.save(movie);
 	}
 
@@ -92,8 +94,25 @@ public class MovieServiceImpl implements MovieService{
 			}
 		}
 	}
+	//recibe una pelicula con su listado de personajes.
+	//si los personajes ingresados no existen los crea.
+	//vincula la pelicula a los personajes.
+	public void saveCharacters(MovieDTO moviedto) {
+		Optional<Movie> newMovie = this.movieRepo.findByTitleAndEnable(moviedto.getTitle(), true);
+		if(!moviedto.getCharacters().isEmpty()) {
+			for(Characters c: moviedto.getCharacters()) {
+				Optional<Characters> characterQuery = this.characterRepository.findByNameAndEnable(c.getName());
+				if(characterQuery.isEmpty()) {
+					c.setEnable(true);
+					this.characterRepository.save(c);
+				}else {
+					characterQuery.get().getMovies().add(newMovie.get());
+					this.movieRepo.save(newMovie.get());
+				}
+			}
+			
+		}
+	}
 
-
-	
 
 }

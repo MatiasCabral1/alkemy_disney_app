@@ -86,17 +86,4 @@ public class AuthController {
 		}
 		
 	}
-	//verificar refresh
-	@PostMapping("/refresh")
-	public ResponseEntity<?> refresh(@RequestBody JwtDTO jwtDto) throws ParseException {
-		try {
-			String token = jwtProvider.refreshToken(jwtDto);
-			JwtDTO jwt = new JwtDTO(token);
-			return new ResponseEntity<JwtDTO>(jwt, HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<Message> (new Message("Se produjo un error"),HttpStatus.BAD_REQUEST);
-		}
-		
-	
-	}
 }

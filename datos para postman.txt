@@ -7,7 +7,7 @@ login :
 charater:registro: 
 url --> http://localhost:8080/characters/register
 {
-    "name": "Superman",
+    "name": "Superman3",
     "age": 30,
     "weight": 90,
     "history": "Historia de superman...",
@@ -23,6 +23,33 @@ url --> http://localhost:8080/characters/update
     "history": "Historia de ironman updated2...",
     "image": "url:image:ironmanUpdate2"
 }
+
+movies: create:
+url --> http://localhost:8080/movie
+{
+    "image": "url:image:",
+    "title": "Ironman",
+    "score": 10,
+    "genres": [
+        {  
+            "name": "Drama"},
+        {
+            "name":"Accion"}],
+    "characters": [{ "name": "vinculado2",
+    "age": 35,
+    "weight": 100,
+    "history": "Historia de superman2...",
+    "image": "url:image:superman2"
+},
+{ "name": "vinculado1",
+    "age": 30,
+    "weight": 90,
+    "history": "Historia de superman...",
+    "image": "url:image:superman"
+}]
+}
+
+
 inciso6:
 busqueda con filtros: 
 name:

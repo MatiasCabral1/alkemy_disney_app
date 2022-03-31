@@ -12,6 +12,6 @@ public interface CharacterService {
 	List<Characters> getByName(String name);
 	List<Characters> getByAge(int age);
 	List<Characters> getByWeight(double weight);
-	List<Characters> findAllByIdMovie(Long id);
 	Optional<Characters> findById(Long characterId);
+	List<Characters> findAllByMoviesIdAndEnable(Long movieId);
 }

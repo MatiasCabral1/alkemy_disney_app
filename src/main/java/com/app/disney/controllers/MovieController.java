@@ -29,6 +29,7 @@ import com.app.disney.security.dto.CharacterFilterReturnDTO;
 import com.app.disney.security.dto.Message;
 import com.app.disney.security.dto.movie.MovieDTO;
 import com.app.disney.security.dto.movie.MovieFilterReturnDTO;
+import com.app.disney.service.CharacterService;
 import com.app.disney.service.impl.GenreServiceImpl;
 import com.app.disney.service.impl.MovieServiceImpl;
 
@@ -44,33 +45,40 @@ public class MovieController {
 
 	@Autowired
 	private ModelMapper modelMapper;
+	
+	@Autowired CharacterService characterService;
 
 	@PostMapping(consumes = "application/json")
 	public ResponseEntity<?> create(@Valid @RequestBody MovieDTO movieDTO, BindingResult result) {
-		try {
-			// validaciones:
-			if (result.hasErrors()) {
-				return new ResponseEntity<Message>(new Message(result.getFieldError().getDefaultMessage()),
-						HttpStatus.BAD_REQUEST);
+			try {
+				// validaciones:
+				if (result.hasErrors()) {
+					return new ResponseEntity<Message>(new Message(result.getFieldError().getDefaultMessage()),
+							HttpStatus.BAD_REQUEST);
+				}
+				// convert DTO to entity
+				if(this.movieService.findByTitle(movieDTO.getTitle()).isEmpty()) {
+					Movie movieRequest = modelMapper.map(movieDTO, Movie.class);
+					movieRequest.setEnable(true);
+					movieService.save(movieRequest);
+					movieService.saveCharacters(movieDTO);
+					this.movieService.setGenres(movieDTO, movieRequest);
+					// convert entity to DTO
+					return new ResponseEntity<MovieDTO>(movieDTO, HttpStatus.CREATED);
+				}else {
+					return new ResponseEntity<Message>(new Message("La pelicula ingresada ya se encuentra registrada"),HttpStatus.BAD_REQUEST);
+				}
+			} catch (Exception e) {
+				return new ResponseEntity<Message>(new Message("Se produjo un error"), HttpStatus.BAD_REQUEST);
 			}
-			// convert DTO to entity
-			Movie movieRequest = modelMapper.map(movieDTO, Movie.class);
-			movieRequest.setEnable(true);
-			movieService.save(movieRequest);
-			this.movieService.setGenres(movieDTO, movieRequest);
-			// convert entity to DTO
-			MovieDTO movieResp = modelMapper.map(movieRequest, MovieDTO.class);
-			return new ResponseEntity<MovieDTO>(movieResp, HttpStatus.CREATED);
-		} catch (Exception e) {
-			return new ResponseEntity<Message>(new Message("Se produjo un error"), HttpStatus.BAD_REQUEST);
-		}
-
+		
 	}
 
 	@PutMapping("/{id}")
 	public ResponseEntity<?> update(@Valid @RequestBody MovieDTO movieDTO, BindingResult result,
 			@PathVariable(value = "id") Long movieId) {
 		try {
+			
 			// validaciones:
 			if (result.hasErrors()) {
 				return new ResponseEntity<Message>(new Message(result.getFieldError().getDefaultMessage()),
@@ -78,12 +86,13 @@ public class MovieController {
 			}
 			// convert DTO to Entity
 			Movie movieRequest = modelMapper.map(movieDTO, Movie.class);
-
 			movieService.update(movieRequest, movieId);
-
+			List<Characters> listCharacters = this.characterService.findAllByMoviesIdAndEnable(movieId);
+			List<Genre> listGenre = this.genreService.findAllByMoviesIdAndEnable(movieId);
 			// convert entity to dto
 			MovieDTO movieResponse = modelMapper.map(movieRequest, MovieDTO.class);
-
+			movieResponse.setCharacters(listCharacters);
+			movieResponse.setGenres(listGenre);
 			return new ResponseEntity<>(movieResponse, HttpStatus.CREATED);
 		} catch (Exception e) {
 			return new ResponseEntity<Message>(new Message("Se produjo un error"), HttpStatus.BAD_REQUEST);

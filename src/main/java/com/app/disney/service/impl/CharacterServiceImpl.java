@@ -1,6 +1,5 @@
 package com.app.disney.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,13 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.app.disney.models.Characters;
-import com.app.disney.models.Genre;
-import com.app.disney.models.Movie;
 import com.app.disney.repositories.CharacterRepository;
-import com.app.disney.repositories.MovieRepository;
-import com.app.disney.security.dto.CharacterDTO;
-import com.app.disney.security.dto.CharacterFilterReturnDTO;
-import com.app.disney.security.dto.movie.MovieDTO;
 import com.app.disney.service.CharacterService;
 import com.app.disney.service.MovieService;
 @Service
@@ -60,13 +53,13 @@ public class CharacterServiceImpl implements CharacterService{
 	}
 
 	@Override
-	public List<Characters> findAllByIdMovie(Long id) {
-		return this.characterRepository.findAllByMoviesIdAndEnable(id, true);
+	public Optional<Characters> findById(Long characterId) {
+		return this.characterRepository.findById(characterId);
 	}
 
 	@Override
-	public Optional<Characters> findById(Long characterId) {
-		return this.characterRepository.findById(characterId);
+	public List<Characters> findAllByMoviesIdAndEnable(Long movieId) {
+		return this.characterRepository.findAllByMoviesIdAndEnable(movieId, true);
 	}
 
 	

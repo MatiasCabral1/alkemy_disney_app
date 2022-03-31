@@ -1,21 +1,27 @@
 package com.app.disney.security.dto.movie;
 
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
+import com.app.disney.models.Characters;
 import com.app.disney.models.Genre;
 
 public class MovieDTO {
 	private Long id;
 	private String image;
 	private String title;
-	private Date creationDate;
+	private String creationDate;
 	private int score;
 	private boolean enable;
 	private List<Genre> genres;
+	private List<Characters> characters;
 	
+	public List<Characters> getCharacters() {
+		return characters;
+	}
+	public void setCharacters(List<Characters> characters) {
+		this.characters = characters;
+	}
 	public List<Genre> getGenres() {
 		return genres;
 	}
@@ -40,10 +46,10 @@ public class MovieDTO {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public Date getCreationDate() {
+	public String getCreationDate() {
 		return creationDate;
 	}
-	public void setCreationDate(Date creationDate) {
+	public void setCreationDate(String creationDate) {
 		this.creationDate = creationDate;
 	}
 	public int getScore() {
