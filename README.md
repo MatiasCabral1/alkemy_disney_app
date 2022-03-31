@@ -4,6 +4,8 @@
 ### El usuario actual para la base de datos es "user: root" "password: root"
 ### Tiene la configuracion para swagger.
 
+#### La aplicacion no fue terminada por completo por lo que no esta hecho todo lo pedido en el challenge
+
 #### Algunos links para probar en postman junto con el formato de texto (json) que se deben enviar en caso de ser metodo POST: 
 
 url --> http://localhost:8080/auth/login
