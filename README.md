@@ -91,7 +91,7 @@ url --> http://localhost:8080/movie/2
 }
 
 busqueda con filtros: 
-##### characters
+### characters
 name:
 
 http://localhost:8080/characters/name/{name}
@@ -108,7 +108,7 @@ weight:
 
 http://localhost:8080/characters/weight/{weight}
 
-##### movies
+### movies
 
 name: 
 
