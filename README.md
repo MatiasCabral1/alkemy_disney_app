@@ -8,12 +8,15 @@
 
 url --> http://localhost:8080/auth/login
 login :
+
  {
     "username": "user2",
     "password": "1234"
 }
+
 charater:registro: 
 url --> http://localhost:8080/characters/register
+
 {
     "name": "Superman3",
     "age": 30,
@@ -21,8 +24,10 @@ url --> http://localhost:8080/characters/register
     "history": "Historia de superman...",
     "image": "url:image:superman"
 }
+
 character:update:
 url --> http://localhost:8080/characters/update
+
 {
     "id": 2,
     "name": "ironmanUpdated2",
@@ -34,6 +39,7 @@ url --> http://localhost:8080/characters/update
 
 movies: create:
 url --> http://localhost:8080/movie
+
 {
     "image": "url:image:",
     "title": "Ironman",
@@ -59,6 +65,7 @@ url --> http://localhost:8080/movie
 
 movie:update
 url --> http://localhost:8080/movie/2
+
 {
     "image": "url:image:",
     "title": "superman0",
@@ -84,9 +91,23 @@ url --> http://localhost:8080/movie/2
 }
 
 busqueda con filtros: 
+##### characters
 name:
 http://localhost:8080/characters/name/{name}
 age:
 http://localhost:8080/characters/age/{age}
 id movie:
-http://localhost:8080/characters/movies/{idMovie}
+http://localhost:8080/characters/movie/{idMovie}
+weight:
+http://localhost:8080/characters/weight/{weight}
+##### movies
+name: 
+http://localhost:8080/movie/name/{name}
+genre:
+http://localhost:8080/movie/genre/{genre}
+order:
+http://localhost:8080/movie/order/{order} -> 'ASC' or 'DESC' 
+
+
+
+
